@@ -1,3 +1,4 @@
+using CompanyEmployees;
 using CompanyEmployees.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -25,12 +26,14 @@ builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
 // Extract ILoggerManager service.
-var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExceptionHandler(logger);
+// var logger = app.Services.GetRequiredService<ILoggerManager>();
+// app.ConfigureExceptionHandler(logger);
+app.UseExceptionHandler(opt => { });
 
 // Configure the HTTP request pipeline.
 
