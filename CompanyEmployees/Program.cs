@@ -16,6 +16,10 @@ builder.Services.AddControllers();
 
 builder.Services.ConfigureLoggerService();
 
+builder.Services.ConfigureServiceManager();
+
+builder.Services.ConfigureSqlContext(builder.Configuration);
+
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
 // Configure the HTTP request pipeline.
