@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using Contracts;
+using NLog;
 
 public class LoggerManager : ILoggerManager
 {

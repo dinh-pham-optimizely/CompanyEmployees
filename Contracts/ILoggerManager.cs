@@ -1,4 +1,6 @@
-﻿public interface ILoggerManager
+﻿namespace Contracts;
+
+public interface ILoggerManager
 {
     void LogInfo(string message);
     void LogWarn(string message);

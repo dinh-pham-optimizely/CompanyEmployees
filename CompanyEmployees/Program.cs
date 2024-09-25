@@ -10,9 +10,15 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 
 builder.Services.ConfigureCors();
 
+builder.Services.ConfigureRepositoryManager();
+
 builder.Services.AddControllers();
 
 builder.Services.ConfigureLoggerService();
+
+builder.Services.ConfigureServiceManager();
+
+builder.Services.ConfigureSqlContext(builder.Configuration);
 
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
