@@ -23,6 +23,8 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
 // Configure the HTTP request pipeline.
