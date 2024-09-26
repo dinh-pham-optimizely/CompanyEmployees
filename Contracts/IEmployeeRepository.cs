@@ -2,4 +2,5 @@
 
 public interface IEmployeeRepository
 {
+    IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges);
 }

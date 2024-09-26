@@ -762,3 +762,31 @@
 2024-09-26 09:05:51.4046 Debug FileTarget(Name=logfile): Preparing for new file: 'C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt'
 2024-09-26 09:05:51.4046 Debug FileTarget(Name=logfile): Creating file appender: 'C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt'
 2024-09-26 09:05:51.4200 Trace FileTarget(Name=logfile): Opening C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt with allowFileSharedWriting=False
+2024-09-26 09:46:34.0030 Info AppDomain Shutting down. LogFactory closing...
+2024-09-26 09:46:34.0030 Debug Stop watching file-filter 'NLog.config' in directory: C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0
+2024-09-26 09:46:34.0030 Trace Flushing all 1 targets...
+2024-09-26 09:46:34.0030 Trace ForEachItemInParallel() 1 items
+2024-09-26 09:46:34.0030 Trace FileTarget(Name=logfile): FlushAsync
+2024-09-26 09:46:34.0030 Trace Continuation invoked: 
+2024-09-26 09:46:34.0030 Trace Parallel task completed. 0 items remaining
+2024-09-26 09:46:34.0142 Debug Flush completed
+2024-09-26 09:46:34.0142 Trace FileTarget(Name=logfile): FlushAsync Done
+2024-09-26 09:46:34.0142 Debug Closing logging configuration...
+2024-09-26 09:46:34.0142 Trace Closing FileTarget(Name=logfile)
+2024-09-26 09:46:34.0142 Debug FileTarget(Name=logfile): Closing...
+2024-09-26 09:46:34.0142 Trace FileTarget(Name=logfile): FinalizeFile 'C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt, isArchiving: False'
+2024-09-26 09:46:34.0142 Debug FileTarget(Name=logfile): FileAppender Invalidate Closing File: 'C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt'
+2024-09-26 09:46:34.0142 Trace FileTarget: Closing 'C:\Users\DinhPham\source\repos\CompanyEmployees\CompanyEmployees\bin\Debug\net8.0\.\logs\2024-09-26_logfile.txt'
+2024-09-26 09:46:34.0142 Debug FileTarget(Name=logfile): Closed.
+2024-09-26 09:46:34.0142 Trace Closing .\logs\${shortdate}_logfile.txt
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${literal}
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${shortdate}
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${literal}
+2024-09-26 09:46:34.0142 Trace Closing ${longdate} ${level:uppercase=true} ${message}
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${longdate}
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${literal}
+2024-09-26 09:46:34.0142 Trace Closing Layout Renderer: ${level}
+2024-09-26 09:46:34.0302 Trace Closing Layout Renderer: ${literal}
+2024-09-26 09:46:34.0302 Trace Closing Layout Renderer: ${message}
+2024-09-26 09:46:34.0302 Debug Finished closing logging configuration.
+2024-09-26 09:46:34.0302 Info LogFactory has been closed.
