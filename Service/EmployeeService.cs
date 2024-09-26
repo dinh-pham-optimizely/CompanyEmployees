@@ -54,4 +54,23 @@ internal sealed class EmployeeService : IEmployeeService
 
         return employeeDto;
     }
+
+    public EmployeeDto CreateEmployee(Guid companyId, EmployeeForCreationDto employee, bool trackChanges)
+    {
+        var company = _repository.Company.GetCompany(companyId, trackChanges);
+
+        if (company is null)
+        {
+            throw new CompanyNotFoundException(companyId);
+        }
+
+        var employeeEntity = _mapper.Map<Employee>(employee);
+
+        _repository.Employee.CreateEmployee(companyId, employeeEntity);
+        _repository.Save();
+
+        var employeeToResult = _mapper.Map<EmployeeDto>(employeeEntity);
+
+        return employeeToResult;
+    }
 }
