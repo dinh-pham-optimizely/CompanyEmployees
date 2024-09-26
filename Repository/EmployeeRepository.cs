@@ -14,4 +14,12 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
 
         return employees;
     }
+
+    public Employee GetEmployee(Guid companyId, Guid id, bool trackChanges)
+    {
+        var employee = FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id), trackChanges)
+            .FirstOrDefault();
+
+        return employee;
+    }
 }
