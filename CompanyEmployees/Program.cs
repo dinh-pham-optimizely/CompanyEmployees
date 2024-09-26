@@ -28,6 +28,14 @@ builder.Services.AddControllers()
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
+builder.Services.AddControllers(config =>
+{
+    // Tell the server to respect the Accept header.
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+}).AddXmlDataContractSerializerFormatters()
+.AddCustomCSVFormatter();
+
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
 // Extract ILoggerManager service.
