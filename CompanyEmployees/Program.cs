@@ -33,7 +33,8 @@ builder.Services.AddControllers(config =>
     // Tell the server to respect the Accept header.
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
-}).AddXmlDataContractSerializerFormatters();
+}).AddXmlDataContractSerializerFormatters()
+.AddCustomCSVFormatter();
 
 var app = builder.Build(); // Create the app variable of the type WebApplication
 
