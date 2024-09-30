@@ -22,4 +22,10 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
 
         return employee;
     }
+
+    public void CreateEmployee(Guid companyId, Employee employee)
+    {
+        employee.CompanyId = companyId;
+        Create(employee);
+    }
 }

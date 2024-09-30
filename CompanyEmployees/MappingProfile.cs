@@ -12,5 +12,10 @@ public class MappingProfile : Profile
 
         // Create a mapper for all fields.
         CreateMap<Employee, EmployeeDto>();
+
+        // Create a mapper from CompanyForCreationDto to Company.
+        CreateMap<CompanyForCreationDto, Company>();
+
+        CreateMap<EmployeeForCreationDto, Employee>();
     }
 }
