@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CompanyEmployees.Presentation.ModelBinders;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -36,5 +37,21 @@ public class CompaniesController : ControllerBase
 
         // Return 201 - Created Status and a link to retrived the created company as Location in Headers.
         return CreatedAtRoute("CompanyById", new {id = createdCompany.Id}, createdCompany);
+    }
+
+    [HttpGet("collection/({ids})", Name = "CompanyCollection")]
+    public IActionResult GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+    {
+        var companies = _service.CompanyService.GetByIds(ids, trackChanges: false);
+
+        return Ok(companies);
+    }
+
+    [HttpPost("collection")]
+    public IActionResult CreateCompanyColletion([FromBody] IEnumerable<CompanyForCreationDto> companies)
+    {
+        var result = _service.CompanyService.CreateCompanyCollection(companies, false);
+
+        return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
     }
 }
