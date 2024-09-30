@@ -33,6 +33,8 @@ public class EmployeesController : ControllerBase
     {
         if (employeeForCreation is null) return BadRequest("EmployeeForCreationDto object is null");
 
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+
         var employee = _service.EmployeeService.CreateEmployee(companyId, employeeForCreation, false);
 
         return CreatedAtRoute("GetEmployeeForCompany", new { companyId, id = employee.id }, employee);
@@ -54,6 +56,8 @@ public class EmployeesController : ControllerBase
             return BadRequest("EmployeeForUpdateDto object is null");
         }
 
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+
         _service.EmployeeService.UpdateEmployee(companyId, id, employee, compTractChanges: false, emTrackChanges: true);
 
         return NoContent();
@@ -67,6 +71,10 @@ public class EmployeesController : ControllerBase
         var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true);
 
         patchDoc.ApplyTo(result.employeeForPatch);
+
+        TryValidateModel(result.employeeForPatch);
+
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
 
         _service.EmployeeService.SaveChangesForPatch(result.employeeForPatch, result.employeeEntity);
 

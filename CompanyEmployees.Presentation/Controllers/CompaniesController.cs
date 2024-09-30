@@ -33,6 +33,8 @@ public class CompaniesController : ControllerBase
     {
         if (company is null) return BadRequest("CompanyForCreationDto object is null");
 
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+
         var createdCompany = _service.CompanyService.CreateCompany(company);
 
         // Return 201 - Created Status and a link to retrived the created company as Location in Headers.
@@ -67,6 +69,8 @@ public class CompaniesController : ControllerBase
     public IActionResult UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)
     {
         if (company is null) return BadRequest("CompanyForUpdateDto object is null");
+
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
 
         _service.CompanyService.UpdateCompany(id, company, trackChanges: true);
 
