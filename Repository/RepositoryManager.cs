@@ -22,5 +22,5 @@ public sealed class RepositoryManager : IRepositoryManager
     public ICompanyRepository Company => _companyRepository.Value;
     public IEmployeeRepository Employee => _employeeRepository.Value;
     // By separating SaveChanges() from RepositoryBase methods, it allows us to modify multiple entities but only need to save these changes once.
-    public void Save() => _repositoryContext.SaveChanges();
+    public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
 }
