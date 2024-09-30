@@ -72,6 +72,10 @@ public class EmployeesController : ControllerBase
 
         patchDoc.ApplyTo(result.employeeForPatch);
 
+        TryValidateModel(result.employeeForPatch);
+
+        if (!ModelState.IsValid) return UnprocessableEntity(ModelState);
+
         _service.EmployeeService.SaveChangesForPatch(result.employeeForPatch, result.employeeEntity);
 
         return NoContent();
