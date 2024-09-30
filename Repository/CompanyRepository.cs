@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
 
 namespace Repository;
 
@@ -9,9 +10,16 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     { }
 
     // Step 2: Implement ICompanyRepositort's GetAllCompanies method in CompanyRepository.
-    public async Task<IEnumerable<Company>> GetAllCompaniesAsync(bool trackChanges) => await FindAll(trackChanges)
+    public async Task<PagedList<Company>> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
+    {
+         var companies = await FindAll(trackChanges)
         .OrderBy(c => c.Name)
         .ToListAsync();
+
+        var count = await FindAll(trackChanges).CountAsync();
+
+        return PagedList<Company>.ToPagedList(companies, count, companyParameters.PageNumber, companyParameters.PageSize);
+    }
 
     public async Task<Company> GetCompanyAsync(Guid id, bool trackChanges) => await FindByCondition(c => c.Id.Equals(id), trackChanges)
         .SingleOrDefaultAsync();
