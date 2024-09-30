@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -41,6 +42,33 @@ public class EmployeesController : ControllerBase
     public IActionResult DeleteEmployee(Guid companyId, Guid id)
     {
         _service.EmployeeService.DeleteEmployee(companyId, id, false);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateEmployee(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+    {
+        if (employee is null)
+        {
+            return BadRequest("EmployeeForUpdateDto object is null");
+        }
+
+        _service.EmployeeService.UpdateEmployee(companyId, id, employee, compTractChanges: false, emTrackChanges: true);
+
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}")]
+    public IActionResult PartiallyUpdateEmployee(Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
+    {
+        if (patchDoc is null) return BadRequest("patchDoc object sent from client is null.");
+
+        var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true);
+
+        patchDoc.ApplyTo(result.employeeForPatch);
+
+        _service.EmployeeService.SaveChangesForPatch(result.employeeForPatch, result.employeeEntity);
 
         return NoContent();
     }
