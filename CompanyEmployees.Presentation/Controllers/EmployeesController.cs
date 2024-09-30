@@ -44,4 +44,17 @@ public class EmployeesController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateEmployee(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+    {
+        if (employee is null)
+        {
+            return BadRequest("EmployeeForUpdateDto object is null");
+        }
+
+        _service.EmployeeService.UpdateEmployee(companyId, id, employee, compTractChanges: false, emTrackChanges: true);
+
+        return NoContent();
+    }
 }
