@@ -1,8 +1,11 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
+using System.Text.Json;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
@@ -16,10 +19,12 @@ public class CompaniesController : ControllerBase
 
     // Last step: Define an api endpoint to get all companies
     [HttpGet]
-    public async Task<IActionResult> GetCompanies()
+    public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
-        var companies = await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
-        return Ok(companies);
+        var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+        return Ok(pagedResult.companies);
     }
 
     [HttpGet("{id:guid}", Name = "CompanyById")]

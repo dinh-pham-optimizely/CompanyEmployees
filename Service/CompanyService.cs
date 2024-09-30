@@ -3,6 +3,7 @@ using Contracts;
 using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service;
 
@@ -20,16 +21,16 @@ internal sealed class CompanyService : ICompanyService
     }
 
     // Step 4: Implement service layer.
-    public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges)
+    public async Task<(IEnumerable<CompanyDto> companies, MetaData metaData)> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
     {
-        var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges);
+        var companiesWithMetaData = await _repository.Company.GetAllCompaniesAsync(companyParameters, trackChanges);
         // var companiesDto = companies.Select(c =>
         //   new CompanyDto(c.Id, c.Name ?? "", string.Join(" - ", c.Address, c.Country))).ToList();
 
         // Using mapper to map the entity to dto.
-        var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+        var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companiesWithMetaData);
 
-        return companiesDto;
+        return (companies: companiesDto, metaData: companiesWithMetaData.MetaData);
     }
 
     public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges)
