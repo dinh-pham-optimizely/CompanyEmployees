@@ -44,6 +44,10 @@ builder.Services.ConfigureOutputCaching();
 
 builder.Services.ConfigureRateLimitingOptions();
 
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
+
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
@@ -93,6 +97,7 @@ app.UseCors("CorsPolicy");
 // app.UseResponseCaching();
 app.UseOutputCache();
 
+app.UseAuthentication();
 app.UseAuthorization(); // To add authorization middleware.
 
 app.MapControllers(); // To add enpoints from controller actions
