@@ -1,11 +1,14 @@
 ﻿using Asp.Versioning;
 using Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Service;
 using Service.Contracts;
+using System.Text;
 using System.Threading.RateLimiting;
 
 namespace CompanyEmployees.Extensions;
@@ -111,5 +114,38 @@ public static class ServiceExtensions
         })
             .AddEntityFrameworkStores<RepositoryContext>()
             .AddDefaultTokenProviders();
+    }
+
+    public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Extract jwtSetting from appsettings.json
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        // get secretKey from env variable.
+        var secretKey = Environment.GetEnvironmentVariable("SECRET");
+
+        // Register the JWT authentication middleware.
+        services.AddAuthentication(opt =>
+        {
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // The issuer is the actual server that created the token.
+                    ValidateIssuer = true,
+                    // The receiver of the token is a valid recipient.
+                    ValidateAudience = true,
+                    // The token has not expired.
+                    ValidateLifetime = true,
+                    // The signing key is valid and is trusted by server.
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
     }
 }
