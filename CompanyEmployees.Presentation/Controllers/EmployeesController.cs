@@ -1,4 +1,5 @@
-﻿using CompanyEmployees.Presentation.ActionFilters;
+﻿using Asp.Versioning;
+using CompanyEmployees.Presentation.ActionFilters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
@@ -8,7 +9,9 @@ using System.Text.Json;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
+[ApiVersion("1.0")]
 [Route("api/companies/{companyId}/employees")]
+[ApiController]
 public class EmployeesController : ControllerBase
 {
     private readonly IServiceManager _service;
