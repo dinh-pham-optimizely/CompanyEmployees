@@ -27,7 +27,7 @@ public class CompaniesController : ControllerBase
     /*[ResponseCache(Duration = 60)]*/
     [DisableRateLimiting]
     [OutputCache(Duration = 60)]
-    [Authorize]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
         var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
