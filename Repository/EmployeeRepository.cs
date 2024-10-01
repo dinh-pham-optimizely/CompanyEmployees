@@ -13,9 +13,9 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
     {
         var employees = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
-            .OrderBy(e => e.Name)
             .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
             .Search(employeeParameters.SearchTerm)
+            .Sort(employeeParameters.OrderBy)
             .ToListAsync();
 
         var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges).CountAsync();

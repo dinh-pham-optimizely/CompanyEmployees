@@ -14,8 +14,8 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     public async Task<PagedList<Company>> GetAllCompaniesAsync(CompanyParameters companyParameters, bool trackChanges)
     {
          var companies = await FindAll(trackChanges)
-        .OrderBy(c => c.Name)
         .Search(companyParameters.SearchTerm)
+        .Sort(companyParameters.OrderBy)
         .ToListAsync();
 
         var count = await FindAll(trackChanges).CountAsync();
