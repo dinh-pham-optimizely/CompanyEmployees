@@ -40,4 +40,16 @@ public static class ServiceExtensions
             opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
         }).AddMvc();
     }
+
+    /*public static void ConfigureResponseCaching(this IServiceCollection services) => services.AddResponseCaching();*/
+
+    public static void ConfigureOutputCaching(this IServiceCollection services) => services.AddOutputCache(opt =>
+    {
+        // Apply output caching for all the endpoints.
+        // This base policy can be overrided by action's output cache attribute.
+        opt.AddBasePolicy(bp => bp.Expire(TimeSpan.FromSeconds(10)));
+
+        // Custom policy.
+        opt.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
+    });
 }

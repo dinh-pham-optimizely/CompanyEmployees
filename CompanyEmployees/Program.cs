@@ -39,6 +39,9 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 
 builder.Services.ConfigureVersioning();
 
+/*builder.Services.ConfigureResponseCaching();*/
+builder.Services.ConfigureOutputCaching();
+
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
@@ -51,6 +54,9 @@ builder.Services.AddControllers(config =>
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
     config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+
+    // Add new cache profile.
+    /*config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });*/
 }).AddXmlDataContractSerializerFormatters()
 .AddCustomCSVFormatter();
 
@@ -80,6 +86,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
+
+// app.UseResponseCaching();
+app.UseOutputCache();
 
 app.UseAuthorization(); // To add authorization middleware.
 
