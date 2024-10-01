@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
 using Contracts;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
@@ -94,5 +96,20 @@ public static class ServiceExtensions
                 }
             };
         });
+    }
+
+    public static void ConfigureIdentity(this IServiceCollection services)
+    {
+        var builder = services.AddIdentity<User, IdentityRole>(o =>
+        {
+            o.Password.RequireDigit = true;
+            o.Password.RequireLowercase = true;
+            o.Password.RequireUppercase = true;
+            o.Password.RequireNonAlphanumeric = true;
+            o.Password.RequiredLength = 12;
+            o.User.RequireUniqueEmail = true;
+        })
+            .AddEntityFrameworkStores<RepositoryContext>()
+            .AddDefaultTokenProviders();
     }
 }
