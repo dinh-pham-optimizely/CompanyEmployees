@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using Asp.Versioning;
+using Contracts;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
@@ -28,4 +29,15 @@ public static class ServiceExtensions
         opts => opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
 
     public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) => builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+
+    public static void ConfigureVersioning(this IServiceCollection services)
+    {
+        services.AddApiVersioning(opt =>
+        {
+            opt.ReportApiVersions = true;
+            opt.AssumeDefaultVersionWhenUnspecified = true;
+            opt.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+            opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+        }).AddMvc();
+    }
 }

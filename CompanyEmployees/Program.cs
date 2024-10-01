@@ -37,6 +37,8 @@ builder.Services.ConfigureServiceManager();
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
 
+builder.Services.ConfigureVersioning();
+
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
