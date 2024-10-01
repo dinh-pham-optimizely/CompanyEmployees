@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 
 namespace Repository;
@@ -14,6 +15,7 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
          var companies = await FindAll(trackChanges)
         .OrderBy(c => c.Name)
+        .Search(companyParameters.SearchTerm)
         .ToListAsync();
 
         var count = await FindAll(trackChanges).CountAsync();
