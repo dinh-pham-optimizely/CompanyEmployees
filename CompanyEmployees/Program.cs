@@ -42,6 +42,8 @@ builder.Services.ConfigureVersioning();
 /*builder.Services.ConfigureResponseCaching();*/
 builder.Services.ConfigureOutputCaching();
 
+builder.Services.ConfigureRateLimitingOptions();
+
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
@@ -85,6 +87,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 
+app.UseRateLimiter();
 app.UseCors("CorsPolicy");
 
 // app.UseResponseCaching();
