@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
 using Service.Contracts;
+using System.Threading.RateLimiting;
 
 namespace CompanyEmployees.Extensions;
 
@@ -52,4 +53,36 @@ public static class ServiceExtensions
         // Custom policy.
         opt.AddPolicy("120SecondsDuration", p => p.Expire(TimeSpan.FromSeconds(120)));
     });
+
+    public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+    {
+        services.AddRateLimiter(opt =>
+        {
+            opt.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                RateLimitPartition.GetFixedWindowLimiter("GlobalLimiter",
+                partition => new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 5,
+                    QueueLimit = 2,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    Window = TimeSpan.FromMinutes(1),
+                })
+            );
+
+            opt.OnRejected = async (context, token) =>
+            {
+                context.HttpContext.Response.StatusCode = 429;
+
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                {
+                    await context.HttpContext.Response.WriteAsync($"Too many requests. Please try again after {retryAfter.TotalSeconds} second(s).", token);
+                }
+                else
+                {
+                    await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later", token);
+                }
+            };
+        });
+    }
 }
