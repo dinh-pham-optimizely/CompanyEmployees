@@ -70,6 +70,16 @@ public static class ServiceExtensions
                 })
             );
 
+            opt.AddPolicy("SpecificPolicy", context =>
+                RateLimitPartition.GetFixedWindowLimiter("SpecificLimiter",
+                partition => new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 3,
+                    Window = TimeSpan.FromSeconds(10),
+                })
+            );
+
             opt.OnRejected = async (context, token) =>
             {
                 context.HttpContext.Response.StatusCode = 429;

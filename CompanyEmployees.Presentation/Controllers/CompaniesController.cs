@@ -4,6 +4,7 @@ using CompanyEmployees.Presentation.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.RateLimiting;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
@@ -23,6 +24,7 @@ public class CompaniesController : ControllerBase
     // Last step: Define an api endpoint to get all companies
     [HttpGet]
     /*[ResponseCache(Duration = 60)]*/
+    [DisableRateLimiting]
     [OutputCache(Duration = 60)]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
@@ -35,6 +37,7 @@ public class CompaniesController : ControllerBase
     [HttpGet("{id:guid}", Name = "CompanyById")]
     /*[ResponseCache(CacheProfileName = "120SecondsDuration")]*/
     [OutputCache(PolicyName = "120SecondsDuration")]
+    [EnableRateLimiting(policyName: "SpecificPolicy")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
