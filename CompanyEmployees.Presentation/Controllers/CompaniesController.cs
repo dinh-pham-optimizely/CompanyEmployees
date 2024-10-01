@@ -3,6 +3,7 @@ using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.OutputCaching;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
@@ -21,7 +22,8 @@ public class CompaniesController : ControllerBase
 
     // Last step: Define an api endpoint to get all companies
     [HttpGet]
-    [ResponseCache(Duration = 60)]
+    /*[ResponseCache(Duration = 60)]*/
+    [OutputCache(Duration = 60)]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
         var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
@@ -31,7 +33,8 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "CompanyById")]
-    [ResponseCache(CacheProfileName = "120SecondsDuration")]
+    /*[ResponseCache(CacheProfileName = "120SecondsDuration")]*/
+    [OutputCache(PolicyName = "120SecondsDuration")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
