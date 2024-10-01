@@ -40,4 +40,6 @@ public static class ServiceExtensions
             opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
         }).AddMvc();
     }
+
+    public static void ConfigureResponseCaching(this IServiceCollection services) => services.AddResponseCaching();
 }

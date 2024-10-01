@@ -21,6 +21,7 @@ public class CompaniesController : ControllerBase
 
     // Last step: Define an api endpoint to get all companies
     [HttpGet]
+    [ResponseCache(Duration = 60)]
     public async Task<IActionResult> GetCompanies([FromQuery] CompanyParameters companyParameters)
     {
         var pagedResult = await _service.CompanyService.GetAllCompaniesAsync(companyParameters, trackChanges: false);
@@ -30,6 +31,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "CompanyById")]
+    [ResponseCache(CacheProfileName = "120SecondsDuration")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
