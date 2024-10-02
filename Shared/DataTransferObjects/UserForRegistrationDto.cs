@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shared.RequestFeatures;
+namespace Shared.DataTransferObjects;
 
 public record UserForRegistrationDto
 {
@@ -12,5 +12,5 @@ public record UserForRegistrationDto
     public string? Password { get; init; }
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
-    public ICollection<string>? Roles {  get; init; }
+    public ICollection<string>? Roles { get; init; }
 }
