@@ -1,7 +1,7 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
-using Shared.RequestFeatures;
+using Shared.DataTransferObjects;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
@@ -39,6 +39,8 @@ public class AuthenticationController : ControllerBase
         if (!await _service.AuthenticationService.ValidateUser(user))
             return Unauthorized();
 
-        return Ok(new { Token = await _service.AuthenticationService.CreateToken() });
+        var tokenDto = await _service.AuthenticationService.CreateToken(populateExp: true);
+
+        return Ok(tokenDto);
     }
 }
