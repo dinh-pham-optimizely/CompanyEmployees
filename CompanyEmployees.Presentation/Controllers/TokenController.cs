@@ -6,6 +6,7 @@ using Shared.DataTransferObjects;
 namespace CompanyEmployees.Presentation.Controllers;
 
 [Route("api/token")]
+[ApiExplorerSettings(GroupName = "v1")]
 [ApiController]
 public class TokenController : ControllerBase
 {
@@ -13,7 +14,8 @@ public class TokenController : ControllerBase
 
     public TokenController(IServiceManager service) => _service = service;
 
-    [HttpPost("refresh")]
+    [HttpPost("refresh", Name = "RefreshTokens")]
+    [ProducesResponseType<TokenDto>(200)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
     {

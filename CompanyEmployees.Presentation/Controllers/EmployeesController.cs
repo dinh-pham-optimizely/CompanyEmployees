@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using System.Dynamic;
 using System.Text.Json;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
 [ApiVersion("1.0")]
 [Route("api/companies/{companyId}/employees")]
+[ApiExplorerSettings(GroupName = "v1")]
 [ApiController]
 public class EmployeesController : ControllerBase
 {
@@ -18,7 +20,8 @@ public class EmployeesController : ControllerBase
 
     public EmployeesController(IServiceManager service) => _service = service;
 
-    [HttpGet]
+    [HttpGet(Name = "GetEmpoyees")]
+    [ProducesResponseType<IEnumerable<EmployeeDto>>(200)]
     public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
         var pagedResult = await _service.EmployeeService.GetEmployeesAsync(companyId, employeeParameters, false);
@@ -28,6 +31,7 @@ public class EmployeesController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "GetEmployeeForCompany")]
+    [ProducesResponseType<EmployeeDto>(200)]
     public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
     {
         var employee = await _service.EmployeeService.GetEmployeeAsync(companyId, id, false);
@@ -35,8 +39,11 @@ public class EmployeesController : ControllerBase
         return Ok(employee);
     }
 
-    [HttpPost]
+    [HttpPost(Name = "CreateEmployee")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [ProducesResponseType<EmployeeDto>(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(422)]
     public async Task<IActionResult> CreateEmployee(Guid companyId, [FromBody] EmployeeForCreationDto employeeForCreation)
     {
         var employee = await _service.EmployeeService.CreateEmployeeAsync(companyId, employeeForCreation, false);
@@ -44,7 +51,8 @@ public class EmployeesController : ControllerBase
         return CreatedAtRoute("GetEmployeeForCompany", new { companyId, id = employee.id }, employee);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id:guid}", Name = "DeleteEmployee")]
+    [ProducesResponseType(204)]
     public async Task<IActionResult> DeleteEmployee(Guid companyId, Guid id)
     {
         await _service.EmployeeService.DeleteEmployeeAsync(companyId, id, false);
@@ -52,8 +60,11 @@ public class EmployeesController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id:guid}", Name = "UpdateEmployee")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(422)]
     public async Task<IActionResult> UpdateEmployee(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
     {
         await _service.EmployeeService.UpdateEmployeeAsync(companyId, id, employee, compTractChanges: false, emTrackChanges: true);
@@ -61,7 +72,10 @@ public class EmployeesController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}")]
+    [HttpPatch("{id:guid}", Name = "PartiallyUpdateEmployee")]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(422)]
     public async Task<IActionResult> PartiallyUpdateEmployee(Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
     {
         if (patchDoc is null) return BadRequest("patchDoc object sent from client is null.");

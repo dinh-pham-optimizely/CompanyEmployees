@@ -6,6 +6,7 @@ using Shared.DataTransferObjects;
 namespace CompanyEmployees.Presentation.Controllers;
 
 [Route("api/authentication")]
+[ApiExplorerSettings(GroupName = "v1")]
 [ApiController]
 public class AuthenticationController : ControllerBase
 {
@@ -13,8 +14,10 @@ public class AuthenticationController : ControllerBase
 
     public AuthenticationController(IServiceManager service) => _service = service;
 
-    [HttpPost]
+    [HttpPost(Name = "Register")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)
     {
         var result = await _service.AuthenticationService.RegisterUser(userForRegistration);
@@ -32,8 +35,10 @@ public class AuthenticationController : ControllerBase
         return StatusCode(201);
     }
 
-    [HttpPost("login")]
+    [HttpPost("login", Name = "Login")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [ProducesResponseType<TokenDto>(200)]
+    [ProducesResponseType(401)]
     public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
     {
         if (!await _service.AuthenticationService.ValidateUser(user))
